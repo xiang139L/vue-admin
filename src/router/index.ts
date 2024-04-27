@@ -9,6 +9,7 @@ interface extendRoute {
 }
 export const constantRoutes: Array<RouteRecordRaw&extendRoute>= [
   { path: '/login',  hidden: true,component: () => import('@/pages/login/index.vue') },
+  { path: '/index', meta: { title: '展示页面',},  hidden: true,component: () => import('@/pages/home/index.vue') },
   {
     path: '/',
     name: 'layout',

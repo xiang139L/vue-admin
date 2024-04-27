@@ -61,11 +61,12 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
 import { ElNotification } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import { getTimeState } from '@/utils/index'
 const ruleFormRef = ref(null)
 const router = useRouter()
+const route = useRoute()
 const UserStore = useUserStore()
 
 const passwordType = ref('password')
@@ -96,7 +97,7 @@ const submitForm = (formEl) => {
       setTimeout(async () => {
         await UserStore.login(ruleForm)
         await router.push({
-          path: '/',
+          path: route.query.redirect?.toString()||'/',
         })
         ElNotification({
           title: getTimeState(),
