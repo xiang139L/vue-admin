@@ -1,0 +1,34 @@
+@mixin flex($d: column, $j: normal, $a: normal) {
+    display: flex;
+    flex-direction: $d;
+    justify-content: $j;
+    align-items: $a;
+  }
+
+  @mixin w-h($w: auto, $h: auto) {
+    @if $w != auto {
+      width: #{$w}px;
+    } @else {
+      width: auto;
+    }
+    @if $h != auto {
+      height: #{$h}px;
+    } @else {
+      height: auto;
+    }
+  }
+
+  @mixin center($p:absolute){
+    position: $p;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @mixin full-container($p:relative){
+    position: $p;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
