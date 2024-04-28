@@ -59,11 +59,12 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive,onMounted } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useRouter,useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import { getTimeState } from '@/utils/index'
+
 const ruleFormRef = ref(null)
 const router = useRouter()
 const route = useRoute()
