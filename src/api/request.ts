@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
-import  useUserStore  from '@/store/modules/user'
+import useUserStore from '@/store/modules/user'
+import { Data } from '@/types/request.d.ts'
+
 // 创建axios实例 进行基本参数配置
 const service = axios.create({
   // 默认请求地址，根据环境的不同可在.env 文件中进行修改
@@ -22,10 +24,8 @@ service.interceptors.request.use(
     const token: string = userStore.token
     // 自定义请求头
     if (token) {
-      config.headers['Authorization'] = token
+      config.headers['Authorization'] = `Bearer ${token}`
     }
-    console.log(config);
-    
     return config
   },
   (error: AxiosError) => {
@@ -39,9 +39,16 @@ service.interceptors.response.use(
   (response: AxiosResponse) => {
     // 直接返回res，当然你也可以只返回res.data
     // 系统如果有自定义code也可以在这里处理
-    return response
+    let { code, msg } = response.data as Data
+
+    // if (code !== 200) {
+    //   ElMessage.error(msg)
+    // }
+    return Promise.resolve(response.data)
   },
   (error: AxiosError) => {
+    let msg = error.response?.data?.msg || error?.message
+    ElMessage.error(msg)
     return Promise.reject(error)
   },
 )

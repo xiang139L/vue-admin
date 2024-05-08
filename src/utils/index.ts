@@ -79,15 +79,7 @@ export function formatTime(time, option) {
     return parseTime(time, option)
   } else {
     return (
-      d.getMonth() +
-      1 +
-      '月' +
-      d.getDate() +
-      '日' +
-      d.getHours() +
-      '时' +
-      d.getMinutes() +
-      '分'
+      d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
     )
   }
 }
@@ -151,7 +143,7 @@ export function param(json) {
     Object.keys(json).map((key) => {
       if (json[key] === undefined) return ''
       return encodeURIComponent(key) + '=' + encodeURIComponent(json[key])
-    })
+    }),
   ).join('&')
 }
 
@@ -225,8 +217,7 @@ export function toggleClass(element, className) {
     classString += '' + className
   } else {
     classString =
-      classString.substr(0, nameIndex) +
-      classString.substr(nameIndex + className.length)
+      classString.substr(0, nameIndex) + classString.substr(nameIndex + className.length)
   }
   element.className = classString
 }
@@ -356,24 +347,7 @@ export function removeClass(ele, cls) {
 
 export function getColor() {
   var str = '#'
-  var arr = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-  ]
+  var arr = ['1', '2', '3', '4', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
   for (var i = 0; i < 6; i++) {
     var num = parseInt((Math.random() * 16).toString())
     str += arr[num]
@@ -408,12 +382,10 @@ export const isPlainObject = function (value) {
     return true
   }
 
-  var constructor =
-    hasOwnProperty.call(prototype, 'constructor') && prototype.constructor
+  var constructor = hasOwnProperty.call(prototype, 'constructor') && prototype.constructor
 
   return (
-    typeof constructor === 'function' &&
-    funToString.call(constructor) === funToString.call(Object)
+    typeof constructor === 'function' && funToString.call(constructor) === funToString.call(Object)
   )
 }
 
@@ -473,8 +445,7 @@ export function hexToRgb(str: any) {
  */
 export function rgbToHex(r: any, g: any, b: any) {
   let reg = /^\d{1,3}$/
-  if (!reg.test(r) || !reg.test(g) || !reg.test(b))
-    return ElMessage.warning('输入错误的rgb颜色值')
+  if (!reg.test(r) || !reg.test(g) || !reg.test(b)) return ElMessage.warning('输入错误的rgb颜色值')
   let hexs = [r.toString(16), g.toString(16), b.toString(16)]
   for (let i = 0; i < 3; i++) if (hexs[i].length == 1) hexs[i] = `0${hexs[i]}`
   return `#${hexs.join('')}`
@@ -504,8 +475,7 @@ export function getLightColor(color: string, level: number) {
   let reg = /^\#?[0-9A-Fa-f]{6}$/
   if (!reg.test(color)) return ElMessage.warning('输入错误的hex颜色值')
   let rgb = hexToRgb(color)
-  for (let i = 0; i < 3; i++)
-    rgb[i] = Math.floor((255 - rgb[i]) * level + rgb[i])
+  for (let i = 0; i < 3; i++) rgb[i] = Math.floor((255 - rgb[i]) * level + rgb[i])
   return rgbToHex(rgb[0], rgb[1], rgb[2])
 }
 

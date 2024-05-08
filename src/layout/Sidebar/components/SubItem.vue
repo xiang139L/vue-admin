@@ -67,7 +67,7 @@ const hasOneShowingChild = (children = [], parent) => {
     }
   })
 
-  // 当只有一个子路由器时，默认情况下会显示该子路由器
+  // 当只有一个子路由器时，默认情况下会显示该子路由器(如果没有设置 父级 alwaysShow: true)
   if (showingChildren.length === 1) {
     return true
   }

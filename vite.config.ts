@@ -26,13 +26,16 @@ export default defineConfig({
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },
   server: {
-    port:8080,
+    port: 8080,
     proxy: {
       '/api': {
         // target:'http://localhost:3000',
+        target: 'http://120.46.50.38:8000',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, "")
-      }
-    }
+        // rewrite: (path) => {
+        //   return path.replace(/^\/api/, '')
+        // },
+      },
+    },
   },
 })

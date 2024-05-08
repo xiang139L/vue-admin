@@ -1,15 +1,28 @@
-import  {createRouter, createWebHistory, RouteRecordRaw,createWebHashHistory,Router} from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw,
+  createWebHashHistory,
+  Router,
+} from 'vue-router'
 import Layout from '@/layout/index.vue'
 
 import tableRouter from './modules/tables'
+import userRouter from './modules/user'
+import musicRouter from './modules/music'
 
 // 扩展继承属性
 interface extendRoute {
-  hidden?:boolean
+  hidden?: boolean
 }
-export const constantRoutes: Array<RouteRecordRaw&extendRoute>= [
-  { path: '/login',  hidden: true,component: () => import('@/pages/login/index.vue') },
-  { path: '/index', meta: { title: '展示页面',},  hidden: true,component: () => import('@/pages/home/index.vue') },
+export const constantRoutes: Array<RouteRecordRaw & extendRoute> = [
+  { path: '/login', hidden: true, component: () => import('@/pages/login/index.vue') },
+  {
+    path: '/index',
+    meta: { title: '展示页面' },
+    hidden: true,
+    component: () => import('@/pages/home/index.vue'),
+  },
   {
     path: '/',
     name: 'layout',
@@ -18,12 +31,11 @@ export const constantRoutes: Array<RouteRecordRaw&extendRoute>= [
     meta: { title: '首页', icon: 'House' },
     children: [
       {
-      path: 'home', 
-      component: () => import('@/pages/admin/index.vue'), 
-      name:'首页',
-      meta: { title: '首页', icon: 'House', affix: true, role: ['other'] 
-      }, 
-    },
+        path: 'home',
+        component: () => import('@/pages/admin/index.vue'),
+        name: '首页',
+        meta: { title: '首页', icon: 'House', affix: true, role: ['other'] },
+      },
     ],
   },
   {
@@ -35,8 +47,10 @@ export const constantRoutes: Array<RouteRecordRaw&extendRoute>= [
 ]
 
 // 异步组件
-export const asyncRoutes: Array<RouteRecordRaw&extendRoute> = [
+export const asyncRoutes: Array<RouteRecordRaw & extendRoute> = [
   ...tableRouter,
+  ...userRouter,
+  ...musicRouter,
   {
     path: '/:pathMatch(.*)',
     redirect: '/404',

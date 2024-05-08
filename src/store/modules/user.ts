@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {login } from '@/api/modules/user'
+import { login, getUserInfo } from '@/api/modules/user'
 const useUserStore = defineStore({
   // id: 必须的，在所有 Store 中唯一
   id: 'userState',
@@ -9,8 +9,14 @@ const useUserStore = defineStore({
     token: null,
     // 登录用户信息
     userInfo: {
-      username:'',
-      password:''
+      id: 3131307098,
+      username: 'admin',
+      nickname: null,
+      email: null,
+      created_at: '2024-03-11 06:10:51',
+      last_login: null,
+      status: 1,
+      user_level_name: 'admin',
     },
     // 角色
     roles: [],
@@ -19,33 +25,35 @@ const useUserStore = defineStore({
   // 可以同步 也可以异步
   actions: {
     // 登录
-  async login(userInfo) {
+    async login(userInfo) {
       const { username, password } = userInfo
-      let res = await login({ username, password })
-      console.log(res);
-      
-      // return new Promise(async (resolve, reject) => {
-      //   this.token = username
-      //   this.userInfo = userInfo
-      //   await this.getRoles()
-      //   resolve(username)
-      // })
-
+      let data: any = await login({ username, password })
+      debugger
+      if (data?.code! != 200) return
+      this.token = data.access
+      debugger
+      await this.getInfo(data.username)
+      return userInfo
     },
     // 获取用户授权角色信息，实际应用中 可以通过token通过请求接口在这里获取用户信息
-    getRoles() {
-      return new Promise((resolve, reject) => {
-        // 获取权限列表 默认就是超级管理员，因为没有进行接口请求 写死
-        this.roles = ['admin']
-        resolve(this.roles)
-      })
+    getRoles(userInfo) {
+      // 获取权限列表 默认就是超级管理员，因为没有进行接口请求 写死
+      this.roles = [userInfo.user_level_name]
+      Promise.resolve(this.roles)
     },
     // 获取用户信息 ，如实际应用中 可以通过token通过请求接口在这里获取用户信息
-    getInfo(roles) {
-      return new Promise((resolve, reject) => {
-        this.roles = roles
-        resolve(roles)
-      })
+    async getInfo(username: string) {
+      let data: any = await getUserInfo({ username })
+      if (data?.code != 200) return
+
+      this.userInfo = data.info.user_info
+
+      this.getRoles(this.userInfo)
+      Promise.resolve(this.userInfo)
+    },
+    // 编辑用户信息3
+    setUserInfo(userInfo) {
+      this.userInfo = userInfo
     },
     // 退出
     logout() {

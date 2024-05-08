@@ -1,14 +1,6 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="ruleForm"
-    :rules="rules"
-    label-width="0"
-  >
-    <el-form-item
-      label=""
-      prop="username"
-    >
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="0">
+    <el-form-item label="" prop="username">
       <el-input
         placeholder="请输入用户名"
         autoComplete="on"
@@ -21,10 +13,7 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item
-      label=""
-      prop="password"
-    >
+    <el-form-item label="" prop="password">
       <el-input
         placeholder="请输入密码"
         autoComplete="on"
@@ -36,13 +25,8 @@
           <el-icon class="el-input__icon"><GoodsFilled /></el-icon>
         </template>
         <template #suffix>
-          <div
-            class="show-pwd"
-            @click="showPwd"
-          >
-            <svg-icon
-              :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-            />
+          <div class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </div>
         </template>
       </el-input>
@@ -59,63 +43,68 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { ref, reactive,onMounted } from 'vue'
-import { ElNotification } from 'element-plus'
-import { useRouter,useRoute } from 'vue-router'
-import useUserStore from '@/store/modules/user'
-import { getTimeState } from '@/utils/index'
+  import { ref, reactive, onMounted } from 'vue'
+  import { ElNotification } from 'element-plus'
+  import { useRouter, useRoute } from 'vue-router'
+  import useUserStore from '@/store/modules/user'
+  import { getTimeState } from '@/utils/index'
+  import { ca } from 'element-plus/es/locale'
 
-const ruleFormRef = ref(null)
-const router = useRouter()
-const route = useRoute()
-const UserStore = useUserStore()
+  const ruleFormRef = ref(null)
+  const router = useRouter()
+  const route = useRoute()
+  const UserStore = useUserStore()
 
-const passwordType = ref('password')
-const loading = ref(false)
-const rules = reactive({
-  password: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  username: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-})
-// 表单数据
-const ruleForm = reactive({
-  username: 'admin',
-  password: '123456',
-})
-
-const showPwd = () => {
-  if (passwordType.value === 'password') {
-    passwordType.value = ''
-  } else {
-    passwordType.value = 'password'
-  }
-}
-const submitForm = (formEl) => {
-  loading.value = true
-  if (!formEl) return
-  formEl.validate((valid) => {
-    if (valid) {
-      // 登录
-      setTimeout(async () => {
-        await UserStore.login(ruleForm)
-        await router.push({
-          path: route.query.redirect?.toString()||'/',
-        })
-        ElNotification({
-          title: getTimeState(),
-          message: '欢迎登录 Vue Admin Perfect',
-          type: 'success',
-          duration: 3000,
-        })
-        loading.value = true
-      }, 1000)
-    } else {
-      console.log('error submit!')
-      return false
-    }
+  const passwordType = ref('password')
+  const loading = ref(false)
+  const rules = reactive({
+    password: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    username: [{ required: true, message: '请输入密码', trigger: 'blur' }],
   })
-}
+  // 表单数据
+  const ruleForm = reactive({
+    username: 'user1',
+    password: '123456',
+  })
+
+  const showPwd = () => {
+    if (passwordType.value === 'password') {
+      passwordType.value = ''
+    } else {
+      passwordType.value = 'password'
+    }
+  }
+  const submitForm = (formEl) => {
+    loading.value = true
+    if (!formEl) return
+    formEl.validate(async (valid) => {
+      if (valid) {
+        // 登录
+        try {
+          await UserStore.login(ruleForm)
+          await router.push({
+            path: route.query.redirect?.toString() || '/',
+          })
+          ElNotification({
+            title: getTimeState(),
+            message: '欢迎登录 Vue Admin Perfect',
+            type: 'success',
+            duration: 3000,
+          })
+          console.log('success submit!', route.query.redirect?.toString())
+          loading.value = true
+        } catch (e) {
+          console.log(e)
+          loading.value = false
+        }
+      } else {
+        console.log('error submit!')
+        return false
+      }
+    })
+  }
 </script>
 
 <style lang="scss" scoped>
-@import '../index.scss';
+  @import '../index.scss';
 </style>
