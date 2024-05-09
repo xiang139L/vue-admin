@@ -56,3 +56,11 @@ export function deleteUser(data: Object) {
     method: 'post',
   })
 }
+
+// export function songSearchInfo(data:Object){
+//   return request({
+//     url:'songSearchInfo',
+//     data,
+//     method:'get'
+//   })
+// }

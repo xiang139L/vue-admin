@@ -34,3 +34,13 @@ export function editMusicById(data: Object) {
     data,
   })
 }
+
+//搜索接口
+export function searchinfoMusic(data: Object) {
+  return request({
+    url: '/SongSearchinfo',
+    method: 'get',
+    params: data,
+  })
+}
+
