@@ -43,4 +43,20 @@ export function searchinfoMusic(data: Object) {
     params: data,
   })
 }
+//编辑歌手
+export function editSingerById(data: Object) {
+  return request({
+    url: '/UpdateSingerView',
+    method: 'post',
+    data,
+  })
+}
 
+// 删除歌手
+export function deleteSingerById(data: Object) {
+  return request({
+    url: '/deleteSingerView',
+    method: 'delete',
+    data,
+  })
+}
