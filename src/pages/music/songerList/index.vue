@@ -1,5 +1,15 @@
 <template>
   <div class="app-container">
+    <div class="header">
+      <el-form :inline="true" :model="formInline1">
+        <el-form-item label="搜索">
+          <el-input v-model="formInline1.query" placeholder="请输入音乐名" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">搜索</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="footer">
       <el-table v-loading="loading" :data="songerList" style="width: 100%" :border="true">
         <el-table-column prop="id" label="歌手id" align="center" />
@@ -53,7 +63,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getSingerList, editSingerById, deleteSingerById } from '@/api/modules/music'
+import { getSingerList, editSingerById, deleteSingerById,searchinfoSinger } from '@/api/modules/music'
 import { deepClone } from '@/utils/index'
 import type { FormInstance } from 'element-plus'
 
@@ -70,18 +80,42 @@ const templateData = ref({
   singer_category: '',
   cat_id:'',
 })
+const formInline1 = ref({ query: '' }) // 搜索表单
 const ruleFormRef = ref<FormInstance | null>(null)
 
+const onSubmit = () => {
+  currentPage.value = 1
+  getSingerListData()
+}
 const getSingerListData = async () => {
   loading.value = true
   const res: any = await getSingerList({
     page: currentPage.value,
-    page_size: pageSize
+    page_size: pageSize,
+    query: formInline1.value.query // 加入搜索查询参数
   })
-  loading.value = false
-  if (res.code != 200) return
-  songerList.value = res.data.map(item => ({ ...item, edit: false }))
-  total.value = res.total
+  try {
+    let res
+    // 如果存在搜索查询条件，使用搜索 API；否则获取默认列表
+    if (params.query) {
+      res = await searchinfoSinger(params)
+    } else {
+      res = await getMusicList(params)
+    }
+
+    // 确保请求返回的数据有效
+    if (res && res.data) {
+      total.value = res.count
+      columns.value = res.data.songs_columns
+      data.value = res.data.songs // 直接赋值数据
+    } else {
+      ElMessage.warning('未找到相关数据')
+    }
+  } catch (error) {
+    ElMessage.error('无法加载音乐列表数据')
+  } finally {
+    loading.value = false
+  }
 }
 
 const confirmEdit = (row) => {

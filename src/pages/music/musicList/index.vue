@@ -15,7 +15,7 @@
         :formatter="prop === 'Duration' ? formatDuration : undefined"></el-table-column>
       <el-table-column label="操作" width="300">
         <template #default="{ row, $index }">
-          <el-button text bg type="success" @click="playMusic(row, $index)">播放</el-button>
+          <!-- <el-button text bg type="success" @click="playMusic(row, $index)">播放</el-button> -->
           <el-button @click="editMusic(row)">编辑</el-button>
           <el-button type="danger" @click="deleteMusic(row)">删除</el-button>
         </template>
