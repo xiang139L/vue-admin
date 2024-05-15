@@ -53,10 +53,21 @@ export function editSingerById(data: Object) {
 }
 
 // 删除歌手
-export function deleteSingerById(data: Object) {
+export function deleteSingerById(id: number) {
   return request({
-    url: '/deleteSingerView',
+    url: '/deleteSingerView', 
     method: 'delete',
-    data,
+    data: {
+      "singer_id": id  
+    }
+  });
+}
+
+
+export function searchinfoSinger(data: Object) {
+  return request({
+    url: '/SingerSearchinfo',
+    method: 'get',
+    params: data,
   })
 }
